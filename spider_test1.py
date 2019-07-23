@@ -64,16 +64,16 @@ def main():
         #写入小区名
         if s not in indexestate[i]:
             continue
-        if i==0:
-            with open(filename, 'w', newline="")as f:
-                f_csv = csv.writer(f)
-                if indexestate[i]:
-                    f_csv.writerow(indexestate[i])
-        else:
-            with open(filename, 'a', newline="")as f:
-                f_csv = csv.writer(f)
-                if indexestate[i]:
-                    f_csv.writerow(indexestate[i])
+        # if i==0:
+        #     with open(filename, 'w', newline="")as f:
+        #         f_csv = csv.writer(f)
+        #         if indexestate[i]:
+        #             f_csv.writerow(indexestate[i])
+        # else:
+        #     with open(filename, 'a', newline="")as f:
+        #         f_csv = csv.writer(f)
+        #         if indexestate[i]:
+        #             f_csv.writerow(indexestate[i])
         url2=indexurl[i]
         pattern2=re.compile('name="spfmenu">.*?<a.*?<a.*?<a.*?<a.*?href="(.*?)".*?>楼盘信息</li>',re.S)
         list2=get_url_list(url2, headers, pattern2)
@@ -100,16 +100,16 @@ def main():
         #循环各个楼栋
         for j in range(len(list5)):
             #将楼栋数据写入csv
-            tmp=[]
-            tmp.append((list5[j][1],''))
-            save_csv(tmp)
+            # tmp=[]
+            # tmp.append((list5[j][1],''))
+            # save_csv(tmp)
             #循环该楼栋下的各页数据
             for k in range(100):
                 url6=url + list5[j][0]
                 url6 = url6 + "&page=" + str(k + 1)
                 print('url6:' + url6)
                 pattern6 = re.compile(
-                    '<td.*?style="width:20.*?">(.*?)</td>.*?<td>(.*?)</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td>(.*?)</td>',
+                    '<td.*?style="width:20.*?">(.*?)</td>.*?<td>(.*?)</td>.*?<td>(.*?)</td>.*?<td>(.*?)</td>.*?<td.*?style="width:5.*?">(.*?)</td>.*?<td>(.*?)</td>.*?<td.*?style="width:15.*?">(.*?)</td>.*?<td>(.*?)</td>.*?<td>(.*?)</td>',
                     re.S)  # .*?<td>.*?</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td.*?</td>.*?<td>(.*?)</td>
                 list6 = get_url_list(url6, headers, pattern6)
                 #print(list6)
@@ -119,14 +119,14 @@ def main():
                     list7=[]
                     for m in range(len(list6)):
                         # print(list6[m][2])
-                        if '未网签' in list6[m][2]:
-                            list7.append((list6[m][0],list6[m][1]+'\t','0'))
-                        elif '已网签' in list6[m][2]:
-                            list7.append((list6[m][0], list6[m][1] + '\t', '1'))
-                        elif '已预定' in list6[m][2]:
-                            list7.append((list6[m][0], list6[m][1] + '\t', '2'))
+                        if '未网签' in list6[m][8]:
+                            list7.append((list6[m][0],list6[m][1]+'\t',list6[m][2],list6[m][3],list6[m][4],list6[m][5],list6[m][6],list6[m][7],'0'))
+                        elif '已网签' in list6[m][8]:
+                            list7.append((list6[m][0], list6[m][1] + '\t',list6[m][2],list6[m][3],list6[m][4],list6[m][5],list6[m][6],list6[m][7], '1'))
+                        elif '已预定' in list6[m][8]:
+                            list7.append((list6[m][0], list6[m][1] + '\t',list6[m][2],list6[m][3],list6[m][4],list6[m][5],list6[m][6],list6[m][7], '2'))
                         else:
-                            list7.append((list6[m][0], list6[m][1] + '\t', '3'))
+                            list7.append((list6[m][0], list6[m][1] + '\t',list6[m][2],list6[m][3],list6[m][4],list6[m][5],list6[m][6],list6[m][7], '3'))
                     save_csv(list7)
                 else:
                     break
